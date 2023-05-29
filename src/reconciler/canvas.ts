@@ -117,7 +117,9 @@ export const reconciler = Reconciler<
     return null;
   },
   preparePortalMount: () => {},
-  resetAfterCommit: () => {},
+  resetAfterCommit: () => {
+    console.log("!!!resetAfterCommit");
+  },
   shouldSetTextContent: () => false,
   clearContainer: () => false,
   hideInstance() {},

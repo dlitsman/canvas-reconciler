@@ -2,8 +2,9 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function App() {
+function App({ name }: { name?: string }) {
   const [arr, setArr] = React.useState<number[]>([]);
+  const [rnd, setRnd] = React.useState(Math.random());
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -18,23 +19,8 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        {arr.map((i, k) => {
-          return <div key={k}>{k}</div>;
-        })}
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <span>{rnd}</span>
+      {name && <p>{name}</p>}
     </div>
   );
 }

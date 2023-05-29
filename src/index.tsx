@@ -3,13 +3,24 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createRoot } from "./reconciler/canvas";
+import { createRoot as createRootLog } from "./reconciler/console-log-renderer";
 
-const root = createRoot();
+const root = createRootLog();
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
+
+console.log("!!!DONE!!!");
+
+setTimeout(() => {
+  root.render(
+    <React.StrictMode>
+      <App name="TEST" />
+    </React.StrictMode>
+  );
+}, 1000);
 
 // root.render(
 //   <React.StrictMode>
