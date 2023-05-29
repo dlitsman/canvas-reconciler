@@ -2,9 +2,6 @@ import Reconciler from "react-reconciler";
 import { ConcurrentRoot } from "react-reconciler/constants";
 import { DefaultEventPriority } from "react-reconciler/constants";
 
-// using typescript is fun...
-// \\
-
 export type InstanceProps = {
   [name: string]: any;
 };
@@ -35,48 +32,11 @@ export interface HostConfig {
   hydratableInstance: Instance;
   publicInstance: Instance;
   hostContext: HostContext;
-  updatePayload: { inDefs: boolean };
+  updatePayload: {};
   childSet: never;
   timeoutHandle: number | undefined;
   noTimeout: -1;
 }
-
-// const HostConfig22 = {
-//   supportsMutation: true,
-
-//   createInstance(type, props, rootContainerInstance, hostContext, internalInstanceHandle) {
-
-//   },
-//   createTextInstance(text, rootContainerInstance, hostContext, internalInstanceHandle){},
-//   appendChildToContainer(container, child) {},
-//   appendChild(parent, child) {},
-//   appendInitialChild(parent, child) {},
-
-//   removeChildFromContainer(container, child) {},
-//   removeChild(parent, child) {},
-
-//   insertInContainerBefore(container, child, before) {},
-//   insertBefore(parent, child, before) {},
-
-//   prepareUpdate(instance, type, oldProps, newProps, rootContainerInstance, currentHostContext) {
-
-//   },
-
-//   commitUpdate(instance, updatePayload, type, oldProps, newProps, finishedWork) {
-
-//   },
-
-//   finilizeInitialChildren() {},
-//   getChildHostContext() {},
-//   getPublicInstance() {},
-//   getRootHostContext() {},
-//   prepareForCommit() {},
-//   resetAfterCommit() {},
-//   shouldSetTextContent() {
-//     return false;
-//   }
-
-// };
 
 const createInstance = (
   type: string,
@@ -84,7 +44,7 @@ const createInstance = (
   root: Instance,
   hostContext: HostContext
 ): Instance => {
-  console.log("!!type", type);
+  console.log("!!type", type, _props);
   return {
     type: "aaaa",
   };
@@ -121,7 +81,7 @@ export const reconciler = Reconciler<
   appendInitialChild: appendChild,
   insertBefore,
   supportsMutation: true,
-  isPrimaryRenderer: false,
+  isPrimaryRenderer: true,
   supportsPersistence: false,
   supportsHydration: false,
   noTimeout: -1,
@@ -142,14 +102,20 @@ export const reconciler = Reconciler<
     return null;
   },
   commitUpdate() {
+    console.log("!!!commitUpdate");
     // todo
   },
   commitTextUpdate(textInstance, _oldText: string, newText: string): void {
     // todo
   },
-  commitMount() {},
+  commitMount() {
+    console.log("!!!commitMount");
+  },
   getPublicInstance: (instance) => instance!,
-  prepareForCommit: () => null,
+  prepareForCommit: function () {
+    console.log("!!!prepareForCommit", Array.from(arguments));
+    return null;
+  },
   preparePortalMount: () => {},
   resetAfterCommit: () => {},
   shouldSetTextContent: () => false,
@@ -157,6 +123,7 @@ export const reconciler = Reconciler<
   hideInstance() {},
   unhideInstance() {},
   createTextInstance: (text, container) => {
+    console.log(text, container);
     return {
       text: text,
       type: "text",
