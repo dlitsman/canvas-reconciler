@@ -2,25 +2,40 @@ import React from "react";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createRoot } from "./reconciler/canvas";
-import { createRoot as createRootLog } from "./reconciler/console-log-renderer";
+import { Container, createRoot } from "./reconciler/canvas";
+import { CanvasPainter } from "./utils/canvas-painter";
 
-const root = createRoot();
+const canvas = document.getElementById("canvas");
+if (canvas == null) {
+  throw new Error("Unable to locate root canvas");
+}
+const container: Container = { children: [] };
+const painter = new CanvasPainter(
+  canvas as HTMLCanvasElement,
+  container,
+  window.devicePixelRatio
+);
+painter.init();
+
+const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
+  () => {
+    painter.renderContainer();
+  }
 );
 
-console.log("!!!DONE!!!");
+// console.log("!!!DONE!!!");
 
-setTimeout(() => {
-  root.render(
-    <React.StrictMode>
-      <App name="TEST" />
-    </React.StrictMode>
-  );
-}, 1000);
+// setTimeout(() => {
+//   root.render(
+//     <React.StrictMode>
+//       <App name="TEST" />
+//     </React.StrictMode>
+//   );
+// }, 1000);
 
 // root.render(
 //   <React.StrictMode>

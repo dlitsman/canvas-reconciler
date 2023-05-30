@@ -2,6 +2,17 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
+import { createElement } from "react";
+import { InstanceProps } from "./reconciler/canvas";
+
+type BoxProps = InstanceProps & {
+  children?: React.ReactNode;
+};
+
+function View({ children, ...props }: BoxProps) {
+  return createElement("view", props, children);
+}
+
 function App({ name }: { name?: string }) {
   const [arr, setArr] = React.useState<number[]>([]);
   const [rnd, setRnd] = React.useState(Math.random());
@@ -18,10 +29,12 @@ function App({ name }: { name?: string }) {
   }, [arr]);
 
   return (
-    <div className="App">
-      <span>{rnd}</span>
-      {name && <p>{name}</p>}
-    </div>
+    <View backgroundColor="red" padding={20}>
+      <View padding={30} backgroundColor="green">
+        {rnd}
+      </View>
+      {name}
+    </View>
   );
 }
 

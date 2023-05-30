@@ -3,10 +3,15 @@ import { ConcurrentRoot } from "react-reconciler/constants";
 import { DefaultEventPriority } from "react-reconciler/constants";
 
 export type InstanceProps = {
-  [name: string]: any;
+  left?: number;
+  top?: number;
+  width?: number;
+  height?: number;
+  padding?: number;
+  backgroundColor?: string;
 };
 
-type Shape = "rectangle" | "square" | "span" | "div" | "p";
+type Shape = "rectangle" | "square" | "span" | "div" | "p" | "view";
 
 export type Instance = {
   type: Shape;
@@ -14,9 +19,9 @@ export type Instance = {
   config: InstanceProps;
 };
 
-type TextOrRegularInstance = TextInstance | Instance;
+export type TextOrRegularInstance = TextInstance | Instance;
 
-type Container = {
+export type Container = {
   children: TextOrRegularInstance[];
 };
 
@@ -49,13 +54,28 @@ const createInstance = (
   _root: Container,
   _hostContext: HostContext
 ): Instance => {
-  if (type !== "square" && type !== "span" && type !== "div" && type !== "p") {
+  if (
+    type !== "square" &&
+    type !== "span" &&
+    type !== "div" &&
+    type !== "p" &&
+    type !== "view"
+  ) {
     throw new Error(`Unknown type: ${type}`);
   }
 
+  const { left, top, padding, backgroundColor, width, height } = props;
+
   return {
     type,
-    config: props,
+    config: {
+      left,
+      top,
+      padding,
+      backgroundColor,
+      width,
+      height,
+    },
   };
 };
 
@@ -184,10 +204,9 @@ export const reconciler = Reconciler<
   getInstanceFromScope: () => null,
 });
 
-export function createRoot() {
-  const cont = { children: [] };
+export function createRoot(container: Container) {
   const root = reconciler.createContainer(
-    cont,
+    container,
     ConcurrentRoot,
     null,
     false,
@@ -198,9 +217,12 @@ export function createRoot() {
   );
 
   return {
-    render: (whatToRender: any) => {
-      reconciler.updateContainer(whatToRender, root, null, () => {
-        console.log("!!!cont", cont);
+    render: (
+      toRender: React.ReactElement,
+      callback: (cont: Container) => void
+    ) => {
+      reconciler.updateContainer(toRender, root, null, () => {
+        callback(container);
       });
     },
   };
