@@ -6,31 +6,36 @@ export type InstanceProps = {
   [name: string]: any;
 };
 
+type Shape = "rectangle" | "square" | "span" | "div" | "p";
+
 export type Instance = {
-  type: string;
+  type: Shape;
   children?: Instance[];
+  config: InstanceProps;
 };
 
-type Container = Instance;
+type TextOrRegularInstance = TextInstance | Instance;
+
+type Container = {
+  children: TextOrRegularInstance[];
+};
 
 export type TextInstance = {
   type: "text";
   text: string;
 };
 
-export type HostContext = {
-  some?: string;
-};
+export type HostContext = {};
 
 export interface HostConfig {
   type: string;
   props: InstanceProps;
-  container: Instance;
+  container: Container;
   instance: Instance;
   textInstance: TextInstance;
   suspenseInstance: Instance;
   hydratableInstance: Instance;
-  publicInstance: Instance;
+  publicInstance: void;
   hostContext: HostContext;
   updatePayload: {};
   childSet: never;
@@ -40,25 +45,56 @@ export interface HostConfig {
 
 const createInstance = (
   type: string,
-  _props: InstanceProps,
-  root: Instance,
-  hostContext: HostContext
+  props: InstanceProps,
+  _root: Container,
+  _hostContext: HostContext
 ): Instance => {
-  console.log("!!type", type, _props);
+  if (type !== "square" && type !== "span" && type !== "div" && type !== "p") {
+    throw new Error(`Unknown type: ${type}`);
+  }
+
   return {
-    type: "aaaa",
+    type,
+    config: props,
   };
 };
 
-const removeChild = (parent: Instance, child: Instance) => {};
+const removeChild = (parent: Instance, child: Instance) => {
+  if (parent.children == null) {
+    throw new Error(`Unexpected null children in removeChild`);
+  }
 
-const appendChild = (parent: Instance, child: Instance) => {};
+  parent.children = parent.children.filter((item) => item !== child);
+};
+
+const appendChild = (parent: Instance, child: Instance) => {
+  if (parent.children == null) {
+    throw new Error(`Unexpected null children in appendChild`);
+  }
+
+  parent.children.push(child);
+};
+
+const appendInitialChild = (parent: Instance, child: Instance) => {
+  parent.children = [child];
+};
 
 const insertBefore = (
   parent: Instance,
   child: Instance,
   beforeChild: Instance
-) => {};
+) => {
+  if (parent.children == null) {
+    throw new Error(`Unexpected null children in insertBefore`);
+  }
+
+  const beforeChildIndex = parent.children.indexOf(beforeChild);
+  if (beforeChildIndex === -1) {
+    throw new Error("beforeChild not found in insertBefore");
+  }
+
+  parent.children = parent.children.splice(beforeChildIndex, 0, child);
+};
 
 export const reconciler = Reconciler<
   HostConfig["type"],
@@ -78,15 +114,19 @@ export const reconciler = Reconciler<
   createInstance,
   removeChild,
   appendChild,
-  appendInitialChild: appendChild,
+  appendInitialChild,
   insertBefore,
   supportsMutation: true,
   isPrimaryRenderer: true,
   supportsPersistence: false,
   supportsHydration: false,
   noTimeout: -1,
-  appendChildToContainer: (container, child) => {},
-  removeChildFromContainer: (container, child) => {},
+  appendChildToContainer: (container, child) => {
+    container.children.push(child);
+  },
+  removeChildFromContainer: (container, child) => {
+    // todo
+  },
   insertInContainerBefore: (container, child, beforeChild) => {},
   getRootHostContext: (root): HostContext => {
     return { some: "1" };
@@ -145,8 +185,9 @@ export const reconciler = Reconciler<
 });
 
 export function createRoot() {
+  const cont = { children: [] };
   const root = reconciler.createContainer(
-    { type: "aaa" },
+    cont,
     ConcurrentRoot,
     null,
     false,
@@ -158,7 +199,9 @@ export function createRoot() {
 
   return {
     render: (whatToRender: any) => {
-      reconciler.updateContainer(whatToRender, root);
+      reconciler.updateContainer(whatToRender, root, null, () => {
+        console.log("!!!cont", cont);
+      });
     },
   };
 }

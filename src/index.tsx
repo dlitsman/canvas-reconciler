@@ -5,7 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createRoot } from "./reconciler/canvas";
 import { createRoot as createRootLog } from "./reconciler/console-log-renderer";
 
-const root = createRootLog();
+const root = createRoot();
 root.render(
   <React.StrictMode>
     <App />
