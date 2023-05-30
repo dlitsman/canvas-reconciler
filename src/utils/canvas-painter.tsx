@@ -52,11 +52,6 @@ export class CanvasPainter {
       this.canvas.style.width = canvasWidth + "px";
       this.canvas.style.height = canvasHeight + "px";
 
-      this.width = this.canvas.width;
-      this.height = this.canvas.height;
-
-      console.log(this);
-
       this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     }
   }
@@ -69,7 +64,6 @@ export class CanvasPainter {
     this.clearCanvas();
 
     const bounds = { x: 0, y: 0, width: this.width, height: this.height };
-    console.log("!!!bounds", bounds);
 
     this.renderElementRecursively(this.container.children, bounds);
   }
@@ -99,7 +93,6 @@ export class CanvasPainter {
         this.renderView(element, bounds);
 
         const newBounds = this._calculateNewBounds(element, bounds);
-        console.log(newBounds);
 
         if (element.children != null) {
           this.renderElementRecursively(element.children, newBounds);
@@ -126,13 +119,12 @@ export class CanvasPainter {
   }
 
   renderText(element: TextInstance, bounds: Bounds) {
-    console.log("!renderTe", bounds, element);
-    //    this.ctx.save();
+    this.ctx.save();
 
     this.ctx.font = "20px serif";
-    //this.ctx.fillStyle = "black";
+    this.ctx.fillStyle = "black";
     this.ctx.fillText(element.text, bounds.x, bounds.y + 20);
 
-    //    this.ctx.restore();
+    this.ctx.restore();
   }
 }
