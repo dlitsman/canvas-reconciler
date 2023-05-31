@@ -9,7 +9,13 @@ const canvas = document.getElementById("canvas");
 if (canvas == null) {
   throw new Error("Unable to locate root canvas");
 }
-const container: Container = { children: [] };
+const container: Container = {
+  children: [],
+  onUpdate: () => {
+    console.log("!!!here");
+    painter.renderContainer();
+  },
+};
 const painter = new CanvasPainter(
   canvas as HTMLCanvasElement,
   container,
@@ -23,6 +29,7 @@ root.render(
     <App />
   </React.StrictMode>,
   () => {
+    console.log("!!!andhere");
     painter.renderContainer();
   }
 );

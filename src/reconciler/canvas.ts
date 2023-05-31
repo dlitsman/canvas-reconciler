@@ -23,6 +23,7 @@ export type TextOrRegularInstance = TextInstance | Instance;
 
 export type Container = {
   children: TextOrRegularInstance[];
+  onUpdate: () => void;
 };
 
 export type TextInstance = {
@@ -158,14 +159,16 @@ export const reconciler = Reconciler<
     return false;
   },
   prepareUpdate() {
-    // todo
-    return null;
+    // todo change so we only return changed values
+    return true;
   },
-  commitUpdate() {
-    console.log("!!!commitUpdate");
-    // todo
+  commitUpdate(instance, payload, type, oldProps, newProps) {
+    // todo fix to only read changed values
+    instance.config = newProps;
+    console.log("!!!commitUpdate", instance, payload, type, oldProps, newProps);
   },
   commitTextUpdate(textInstance, _oldText: string, newText: string): void {
+    textInstance.text = newText;
     // todo
   },
   commitMount() {
@@ -177,8 +180,8 @@ export const reconciler = Reconciler<
     return null;
   },
   preparePortalMount: () => {},
-  resetAfterCommit: () => {
-    console.log("!!!resetAfterCommit");
+  resetAfterCommit: (container) => {
+    container.onUpdate();
   },
   shouldSetTextContent: () => false,
   clearContainer: () => false,

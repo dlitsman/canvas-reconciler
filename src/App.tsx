@@ -21,7 +21,7 @@ function App({ name }: { name?: string }) {
     const interval = setInterval(() => {
       const newArr = [...arr, arr.length];
       setArr(newArr);
-    }, 10000000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
@@ -30,8 +30,8 @@ function App({ name }: { name?: string }) {
 
   return (
     <View backgroundColor="red" padding={20}>
-      <View padding={30} backgroundColor="green">
-        {rnd}
+      <View padding={30} left={100} backgroundColor="green">
+        {arr.length}
       </View>
       {name}
     </View>

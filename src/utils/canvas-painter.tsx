@@ -87,10 +87,23 @@ export class CanvasPainter {
     };
   }
 
+  _calculateElementSize(element: Instance, bounds: Bounds) {
+    const extraLeft = element.config.left ?? 0;
+    const extraTop = element.config.top ?? 0;
+
+    return {
+      x: bounds.x + extraLeft,
+      y: bounds.y + extraTop,
+      width: bounds.width - extraLeft,
+      height: bounds.height - extraTop,
+    };
+  }
+
   renderElementRecursively(elements: TextOrRegularInstance[], bounds: Bounds) {
     for (const element of elements) {
       if (element.type === "view") {
-        this.renderView(element, bounds);
+        const elementBounds = this._calculateElementSize(element, bounds);
+        this.renderView(element, elementBounds);
 
         const newBounds = this._calculateNewBounds(element, bounds);
 
@@ -112,7 +125,6 @@ export class CanvasPainter {
     this.ctx.save();
 
     this.ctx.fillStyle = element.config.backgroundColor;
-    console.log("!!!drawing", bounds);
     this.ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 
     this.ctx.restore();
