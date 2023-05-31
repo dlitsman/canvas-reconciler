@@ -12,7 +12,6 @@ if (canvas == null) {
 const container: Container = {
   children: [],
   onUpdate: () => {
-    console.log("!!!here");
     painter.renderContainer();
   },
 };
@@ -27,22 +26,19 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  () => {
-    console.log("!!!andhere");
-    painter.renderContainer();
-  }
+  </React.StrictMode>
 );
 
 // console.log("!!!DONE!!!");
 
-// setTimeout(() => {
-//   root.render(
-//     <React.StrictMode>
-//       <App name="TEST" />
-//     </React.StrictMode>
-//   );
-// }, 1000);
+setTimeout(() => {
+  root.render(
+    <React.StrictMode>
+      <App name="TEST" />
+      {"aaa"}
+    </React.StrictMode>
+  );
+}, 1000);
 
 // root.render(
 //   <React.StrictMode>

@@ -65,6 +65,8 @@ export class CanvasPainter {
 
     const bounds = { x: 0, y: 0, width: this.width, height: this.height };
 
+    console.log("container: ", this.container);
+
     this.renderElementRecursively(this.container.children, bounds);
   }
 
@@ -94,8 +96,8 @@ export class CanvasPainter {
     return {
       x: bounds.x + extraLeft,
       y: bounds.y + extraTop,
-      width: bounds.width - extraLeft,
-      height: bounds.height - extraTop,
+      width: element.config.width ?? bounds.width - extraLeft,
+      height: element.config.height ?? bounds.height - extraTop,
     };
   }
 
@@ -131,6 +133,7 @@ export class CanvasPainter {
   }
 
   renderText(element: TextInstance, bounds: Bounds) {
+    console.log("rendering text", element);
     this.ctx.save();
 
     this.ctx.font = "20px serif";

@@ -32,6 +32,13 @@ function App({ name }: { name?: string }) {
     <View backgroundColor="red" padding={20}>
       <View padding={30} left={100} backgroundColor="green">
         {arr.length}
+        <View
+          left={100}
+          top={50}
+          height={20}
+          width={20}
+          backgroundColor="gray"
+        />
       </View>
       {name}
     </View>

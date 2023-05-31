@@ -15,7 +15,7 @@ type Shape = "rectangle" | "square" | "span" | "div" | "p" | "view";
 
 export type Instance = {
   type: Shape;
-  children?: Instance[];
+  children?: TextOrRegularInstance[];
   config: InstanceProps;
 };
 
@@ -88,7 +88,8 @@ const removeChild = (parent: Instance, child: Instance) => {
   parent.children = parent.children.filter((item) => item !== child);
 };
 
-const appendChild = (parent: Instance, child: Instance) => {
+const appendChild = (parent: Instance, child: Instance | TextInstance) => {
+  console.log("appending child");
   if (parent.children == null) {
     throw new Error(`Unexpected null children in appendChild`);
   }
@@ -96,8 +97,15 @@ const appendChild = (parent: Instance, child: Instance) => {
   parent.children.push(child);
 };
 
-const appendInitialChild = (parent: Instance, child: Instance) => {
-  parent.children = [child];
+const appendInitialChild = (
+  parent: Instance,
+  child: Instance | TextInstance
+) => {
+  if (parent.children == null) {
+    parent.children = [];
+  }
+
+  appendChild(parent, child);
 };
 
 const insertBefore = (
@@ -165,18 +173,17 @@ export const reconciler = Reconciler<
   commitUpdate(instance, payload, type, oldProps, newProps) {
     // todo fix to only read changed values
     instance.config = newProps;
-    console.log("!!!commitUpdate", instance, payload, type, oldProps, newProps);
   },
   commitTextUpdate(textInstance, _oldText: string, newText: string): void {
     textInstance.text = newText;
     // todo
   },
   commitMount() {
-    console.log("!!!commitMount");
+    //  console.log("!!!commitMount");
   },
   getPublicInstance: (instance) => instance!,
   prepareForCommit: function () {
-    console.log("!!!prepareForCommit", Array.from(arguments));
+    //console.log("!!!prepareForCommit", Array.from(arguments));
     return null;
   },
   preparePortalMount: () => {},
@@ -222,10 +229,10 @@ export function createRoot(container: Container) {
   return {
     render: (
       toRender: React.ReactElement,
-      callback: (cont: Container) => void
+      callback?: (cont: Container) => void
     ) => {
       reconciler.updateContainer(toRender, root, null, () => {
-        callback(container);
+        callback && callback(container);
       });
     },
   };
