@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 
 import { createElement } from "react";
@@ -15,7 +14,6 @@ function View({ children, ...props }: BoxProps) {
 
 function App({ name }: { name?: string }) {
   const [arr, setArr] = React.useState<number[]>([]);
-  const [rnd, setRnd] = React.useState(Math.random());
 
   React.useEffect(() => {
     const interval = setInterval(() => {

@@ -89,7 +89,6 @@ const removeChild = (parent: Instance, child: Instance) => {
 };
 
 const appendChild = (parent: Instance, child: Instance | TextInstance) => {
-  console.log("appending child");
   if (parent.children == null) {
     throw new Error(`Unexpected null children in appendChild`);
   }
@@ -195,7 +194,6 @@ export const reconciler = Reconciler<
   hideInstance() {},
   unhideInstance() {},
   createTextInstance: (text, container) => {
-    console.log(text, container);
     return {
       text: text,
       type: "text",
