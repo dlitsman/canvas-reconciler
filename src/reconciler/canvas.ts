@@ -11,7 +11,7 @@ export type InstanceProps = {
   backgroundColor?: string;
 };
 
-type Shape = "rectangle" | "square" | "span" | "div" | "p" | "view";
+type Shape = "view";
 
 export type Instance = {
   type: Shape;
@@ -55,13 +55,7 @@ const createInstance = (
   _root: Container,
   _hostContext: HostContext
 ): Instance => {
-  if (
-    type !== "square" &&
-    type !== "span" &&
-    type !== "div" &&
-    type !== "p" &&
-    type !== "view"
-  ) {
+  if (type !== "view") {
     throw new Error(`Unknown type: ${type}`);
   }
 
