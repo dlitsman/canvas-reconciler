@@ -26,7 +26,7 @@ function App({ name }: { name?: string }) {
     const interval = setInterval(() => {
       const newArr = [...arr, arr.length];
       setArr(newArr);
-    }, 10000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);
@@ -37,10 +37,11 @@ function App({ name }: { name?: string }) {
     <View backgroundColor="red" padding={20}>
       <View padding={30} left={100} backgroundColor="green">
         {arr.length}
+        {arr.length === 0 ? <View>13123</View> : <>2222</>}
         {/* todo doesn't work with more complex components... */}
-        <QueryClientProvider client={queryClient}>
+        {/* <QueryClientProvider client={queryClient}>
           <Some />
-        </QueryClientProvider>
+        </QueryClientProvider> */}
         <View
           left={100}
           top={50}

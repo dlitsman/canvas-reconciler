@@ -186,7 +186,7 @@ export const reconciler = Reconciler<
     // todo
   },
   commitMount() {
-    //  console.log("!!!commitMount");
+    console.log("!!!commitMount");
   },
   getPublicInstance: (instance) => instance!,
   prepareForCommit: function () {

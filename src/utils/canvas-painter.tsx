@@ -112,6 +112,7 @@ export class CanvasPainter {
 
         if (element.children != null) {
           console.log("!!!!new-recursive", {
+            element,
             childs: element.children,
             id: element.id,
           });
