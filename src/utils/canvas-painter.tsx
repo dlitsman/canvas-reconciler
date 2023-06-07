@@ -102,6 +102,7 @@ export class CanvasPainter {
   }
 
   renderElementRecursively(elements: TextOrRegularInstance[], bounds: Bounds) {
+    console.log("rendering elements", elements);
     for (const element of elements) {
       if (element.type === "view") {
         const elementBounds = this._calculateElementSize(element, bounds);
@@ -110,6 +111,10 @@ export class CanvasPainter {
         const newBounds = this._calculateNewBounds(element, bounds);
 
         if (element.children != null) {
+          console.log("!!!!new-recursive", {
+            childs: element.children,
+            id: element.id,
+          });
           this.renderElementRecursively(element.children, newBounds);
         }
       } else if (element.type === "text") {

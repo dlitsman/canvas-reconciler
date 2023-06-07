@@ -17,6 +17,7 @@ export type Instance = {
   type: Shape;
   children?: TextOrRegularInstance[];
   config: InstanceProps;
+  id: number;
 };
 
 export type TextOrRegularInstance = TextInstance | Instance;
@@ -29,6 +30,7 @@ export type Container = {
 export type TextInstance = {
   type: "text";
   text: string;
+  id: number;
 };
 
 export type HostContext = {};
@@ -49,6 +51,7 @@ export interface HostConfig {
   noTimeout: -1;
 }
 
+let id = 0;
 const createInstance = (
   type: string,
   props: InstanceProps,
@@ -59,10 +62,13 @@ const createInstance = (
     throw new Error(`Unknown type: ${type}`);
   }
 
+  console.log("!!!createInstance", type, props);
+
   const { left, top, padding, backgroundColor, width, height } = props;
 
   return {
     type,
+    id: ++id,
     config: {
       left,
       top,
@@ -78,6 +84,7 @@ const removeChild = (parent: Instance, child: Instance) => {
   if (parent.children == null) {
     throw new Error(`Unexpected null children in removeChild`);
   }
+  console.log("!!!removeChild", parent, child);
 
   parent.children = parent.children.filter((item) => item !== child);
 };
@@ -86,6 +93,7 @@ const appendChild = (parent: Instance, child: Instance | TextInstance) => {
   if (parent.children == null) {
     throw new Error(`Unexpected null children in appendChild`);
   }
+  console.log("!!!appendChild", parent, child);
 
   parent.children.push(child);
 };
@@ -97,6 +105,7 @@ const appendInitialChild = (
   if (parent.children == null) {
     parent.children = [];
   }
+  console.log("!!!appendInitialChild", parent, child);
 
   appendChild(parent, child);
 };
@@ -114,6 +123,8 @@ const insertBefore = (
   if (beforeChildIndex === -1) {
     throw new Error("beforeChild not found in insertBefore");
   }
+
+  console.log("!!!insertBefore", parent, child);
 
   parent.children = parent.children.splice(beforeChildIndex, 0, child);
 };
@@ -149,7 +160,9 @@ export const reconciler = Reconciler<
   removeChildFromContainer: (container, child) => {
     // todo
   },
-  insertInContainerBefore: (container, child, beforeChild) => {},
+  insertInContainerBefore: (container, child, beforeChild) => {
+    console.log("!!insertInContainerBefore");
+  },
   getRootHostContext: (root): HostContext => {
     return { some: "1" };
   },
@@ -165,7 +178,8 @@ export const reconciler = Reconciler<
   },
   commitUpdate(instance, payload, type, oldProps, newProps) {
     // todo fix to only read changed values
-    instance.config = newProps;
+    const { left, top, padding, backgroundColor, width, height } = newProps;
+    instance.config = { left, top, padding, backgroundColor, width, height };
   },
   commitTextUpdate(textInstance, _oldText: string, newText: string): void {
     textInstance.text = newText;
@@ -181,6 +195,7 @@ export const reconciler = Reconciler<
   },
   preparePortalMount: () => {},
   resetAfterCommit: (container) => {
+    console.log("!!!container", container);
     container.onUpdate();
   },
   shouldSetTextContent: () => false,
@@ -191,6 +206,7 @@ export const reconciler = Reconciler<
     return {
       text: text,
       type: "text",
+      id: ++id,
     };
   },
   hideTextInstance: () => {},

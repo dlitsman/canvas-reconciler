@@ -31,14 +31,14 @@ root.render(
 
 // console.log("!!!DONE!!!");
 
-setTimeout(() => {
-  root.render(
-    <React.StrictMode>
-      <App name="TEST" />
-      {"aaa"}
-    </React.StrictMode>
-  );
-}, 1000);
+// setTimeout(() => {
+//   root.render(
+//     <React.StrictMode>
+//       <App name="TEST" />
+//       {"aaa"}
+//     </React.StrictMode>
+//   );
+// }, 1000);
 
 // root.render(
 //   <React.StrictMode>
