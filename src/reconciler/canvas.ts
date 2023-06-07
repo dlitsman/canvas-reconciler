@@ -126,7 +126,7 @@ const insertBefore = (
 
   console.log("!!!insertBefore", parent, child);
 
-  parent.children = parent.children.splice(beforeChildIndex, 0, child);
+  parent.children.splice(beforeChildIndex, 0, child);
 };
 
 export const reconciler = Reconciler<
@@ -193,15 +193,21 @@ export const reconciler = Reconciler<
     //console.log("!!!prepareForCommit", Array.from(arguments));
     return null;
   },
-  preparePortalMount: () => {},
+  preparePortalMount: () => {
+    console.log("!!!preparePortalMount");
+  },
   resetAfterCommit: (container) => {
-    console.log("!!!container", container);
+    console.log("!!!resetAfterCommit", container);
     container.onUpdate();
   },
   shouldSetTextContent: () => false,
   clearContainer: () => false,
-  hideInstance() {},
-  unhideInstance() {},
+  hideInstance() {
+    console.log("!!!hideInstance");
+  },
+  unhideInstance() {
+    console.log("!!!unhideInstance");
+  },
   createTextInstance: (text, container) => {
     return {
       text: text,
@@ -209,17 +215,29 @@ export const reconciler = Reconciler<
       id: ++id,
     };
   },
-  hideTextInstance: () => {},
-  unhideTextInstance: () => {},
+  hideTextInstance: () => {
+    console.log("!!!hideTextInstance");
+  },
+  unhideTextInstance: () => {
+    console.log("!!!unhideTextInstance");
+  },
   getCurrentEventPriority: () => DefaultEventPriority,
   beforeActiveInstanceBlur: () => {},
   afterActiveInstanceBlur: () => {},
   detachDeletedInstance: () => {},
   scheduleTimeout: setTimeout,
   cancelTimeout: clearTimeout,
-  getInstanceFromNode: () => null,
-  prepareScopeUpdate: () => {},
-  getInstanceFromScope: () => null,
+  getInstanceFromNode: () => {
+    console.log("!!getInstanceFromNode");
+    return null;
+  },
+  prepareScopeUpdate: () => {
+    console.log("!!prepareScopeUpdate");
+  },
+  getInstanceFromScope: () => {
+    console.log("!!getInstanceFromScope");
+    return null;
+  },
 });
 
 export function createRoot(container: Container) {
