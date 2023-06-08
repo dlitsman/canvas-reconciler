@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./App.css";
 
 import { createElement } from "react";
@@ -40,7 +40,9 @@ function App({ name }: { name?: string }) {
         {arr.length === 0 ? <View>13123</View> : <>2222</>}
         {/* todo doesn't work with more complex components... */}
         <QueryClientProvider client={queryClient}>
-          <Some />
+          <Suspense fallback={"asdasdasdasdas"}>
+            <Some />
+          </Suspense>
         </QueryClientProvider>
         <View
           left={100}
@@ -58,10 +60,11 @@ function App({ name }: { name?: string }) {
 function Some() {
   const { isLoading, error, data } = useQuery({
     queryKey: ["repoData"],
+    suspense: true,
     queryFn: () =>
-      fetch("https://api.github.com/repos/tannerlinsley/react-query").then(
-        (res) => res.json()
-      ),
+      fetch(
+        `https://api.github.com/repos/tannerlinsley/react-query?date=${Date.now()}`
+      ).then((res) => res.json()),
   });
 
   if (isLoading) return <>Loading1!!...</>;
