@@ -158,7 +158,7 @@ export const reconciler = Reconciler<
     container.children.push(child);
   },
   removeChildFromContainer: (container, child) => {
-    // todo
+    container.children = container.children.filter((item) => item !== child);
   },
   insertInContainerBefore: (container, child, beforeChild) => {
     console.log("!!insertInContainerBefore");
