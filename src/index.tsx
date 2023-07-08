@@ -29,8 +29,6 @@ root.render(
   </React.StrictMode>
 );
 
-// console.log("!!!DONE!!!");
-
 // setTimeout(() => {
 //   root.render(
 //     <React.StrictMode>
